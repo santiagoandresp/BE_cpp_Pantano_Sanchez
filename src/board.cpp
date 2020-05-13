@@ -13,9 +13,9 @@ int main(){
   AnalogSensorLuminosity luminosity(DELAY,lum_environment);
   
   // branchement des capteurs actionneurs
-  esp8266.pin(1,temperature);
-  esp8266.pin(0,led1);
   esp8266.i2c(1,screen);
+  esp8266.pin(0,led1);
+  esp8266.pin(1,temperature);
   esp8266.pin(2,luminosity);
   esp8266.pin(3,iled1);
   

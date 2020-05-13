@@ -14,6 +14,7 @@ AnalogSensorTemperature::AnalogSensorTemperature(int d,int  t):Device(),val(t),t
 
 void AnalogSensorTemperature::run(){
   while(1){
+    val = TEMP;
     alea=1-alea;
     if(ptrmem != NULL)
       *ptrmem = val + alea;
@@ -27,8 +28,8 @@ DigitalActuatorLED::DigitalActuatorLED(int t): Device(),state(LOW),temps(t){
 
 void DigitalActuatorLED::run(){
   while(1){
-    if(ptrmem!=NULL)
-      state=*ptrmem;
+    if(ptrmem != NULL)
+      state = *ptrmem;
     if (state==LOW)
       cout << "LED: OFF\n";
     else
@@ -51,12 +52,12 @@ void IntelligentDigitalActuatorLED::run(){
     if (state == LOW) {
 
       cout << "smartLED: OFF\n";
-      lum_environment-=50;
+      lum_environment = 250;
 
     } else {
 
       cout << "smartLED: ON\n";
-      lum_environment+=50;
+      lum_environment = 200;
 
     }
 
@@ -90,6 +91,7 @@ void AnalogSensorLuminosity::run() {
 
   while(1){
 
+    val = lum_environment;
     alea = 5 - alea;
     if(ptrmem != NULL)
       *ptrmem = val + alea;
