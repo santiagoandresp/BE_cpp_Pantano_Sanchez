@@ -8,9 +8,72 @@
 #include <fstream>
 #include "core_simulation.h"
 
-extern int lum_environment;
+extern int pressureWheel[4];
+extern int engineTemp;
 
-// exemple de capteur analogique de temperature, ne pas oublier d'heriter de Device
+class Sensor: public Device {
+
+protected:
+
+  int val;
+  int alea;
+
+public:
+
+  Sensor();
+
+};
+
+class Actuator: public Device {
+
+protected:
+
+  int state;
+
+public:
+
+  Actuator();
+
+};
+
+// Wheel pressure sensor
+class TPMS: public Sensor {
+
+private:
+
+  int wheel;
+
+public:
+
+  TPMS(int d,int a, int w);
+  void run();
+
+};
+
+// Screen
+class LCD: public Actuator {
+
+private:
+
+  char buf[I2C_BUFFER_SIZE];
+
+public:
+
+  LCD();
+  void run();
+
+};
+
+class EngineTemperatureSensor: public Sensor {
+
+public:
+
+  EngineTemperatureSensor(int d, int a);
+  void run();
+
+};
+
+/*// exemple de capteur analogique de temperature, ne pas oublier d'heriter de Device
 class AnalogSensorTemperature: public Device {
 private:
   // fait osciller la valeur du cpateur de 1
@@ -98,6 +161,6 @@ public:
   ExternalDigitalSensorButton(int d,bool s);
   virtual void run();
 
-};
+};*/
 
 #endif

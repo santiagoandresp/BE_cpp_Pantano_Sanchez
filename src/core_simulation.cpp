@@ -95,6 +95,7 @@ Device::Device(){
   ptrmem=NULL;
   i2caddr=-1;
   i2cbus=NULL;
+  temps = 0;
 }
 
 void Device::run(){

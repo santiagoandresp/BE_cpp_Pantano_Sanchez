@@ -9,12 +9,10 @@ void Board::setup(){
   Serial.begin(9600);
 // on fixe les pin en entree et en sorite en fonction des capteurs/actionneurs mis sur la carte
   pinMode(1,INPUT);
-  pinMode(0,OUTPUT);
-  pinMode(2,INPUT);
-  pinMode(3,OUTPUT);
   pinMode(4,INPUT);
-  digitalWrite(0,LOW);
-  digitalWrite(3,LOW);
+  pinMode(5,INPUT);
+  pinMode(6,INPUT);
+  pinMode(7,INPUT);
 
 }
 
@@ -22,62 +20,53 @@ void Board::setup(){
 void Board::loop(){
   char buf[100];
   int val;
-  static int cpt=0;
-  static int bascule=0;
-  int i=0;
+  static int counter = 0;
 
-  for(i=0;i<10;i++){
-    // lecture sur la pin 1 : capteur de temperature
-    val = analogRead(1);
-    sprintf(buf,"temperature %d",val);
-    // Serial.println(buf);
+  switch (counter) {
+    case 0:
 
-    if (cpt%5 == 0) {
-
-      // tous les 5 fois on affiche sur l ecran la temperature
-      sprintf(buf,"%d",val);
+      val = analogRead(4);
+      sprintf(buf,"Pressure Wheel 1 %d",val);
       bus.write(1,buf,100);
-      sprintf(buf,"%d",val);
+      break;
+
+    case 2:
+
+      val = analogRead(5);
+      sprintf(buf,"Pressure Wheel 2 %d",val);
       bus.write(1,buf,100);
+      break;
 
-    }
+    case 4:
 
-    val = analogRead(2);
-    sprintf(buf,"Luminosity %d",val);
-    // Serial.println(buf);
-
-    if ((cpt+1)%5 == 0) {
-
-      // tous les 5 fois on affiche sur l ecran la luminosité
-      sprintf(buf,"%d",val);
+      val = analogRead(6);
+      sprintf(buf,"Pressure Wheel 3 %d",val);
       bus.write(1,buf,100);
-      sprintf(buf,"%d",val);
+      break;
+
+    case 6:
+
+      val = analogRead(7);
+      sprintf(buf,"Pressure Wheel 4 %d",val);
       bus.write(1,buf,100);
+      break;
 
-    }
+    case 8:
 
-    cpt++;
-    sleep(1);
+      val = analogRead(1);
+      sprintf(buf,"Engine temperature %d",val);
+      bus.write(1,buf,100);
+    
+    default:
 
-  }
+      break;
 
-  // on eteint et on allume la LED
-  if(bascule) {
+  };
 
-    digitalWrite(0,HIGH);
+  if (counter == 10) counter = 0;
+  else counter++;
 
-  } else {
-
-    digitalWrite(0,LOW);
-
-  }
-
-  bascule = 1 - bascule;
-
-  val = digitalRead(4);
-  if (val == 1) digitalWrite(3,HIGH);
-  else digitalWrite(3,LOW);
+  sleep(1);
   
-}
-
+};
 

@@ -1,11 +1,77 @@
-
 #include "mydevices.h"
 
 using namespace std;
 
-int lum_environment = 200;
+int pressureWheel[4] = {32,32,30,31};
+int engineTemp = 98;
 
-//classe AnalogSensorTemperature
+Sensor::Sensor(): Device() {};
+
+Actuator::Actuator(): Device() {};
+
+TPMS::TPMS(int d,int a, int w): Sensor() {
+
+  temps = d;
+  alea = a;
+  wheel = w;
+  val = pressureWheel[wheel-1];
+
+};
+
+void TPMS::run() {
+
+  while (1) {
+
+    val = pressureWheel[wheel-1];
+    alea = 1 - alea;
+    if(ptrmem != NULL) *ptrmem = val + alea;
+    sleep(temps);
+
+  };
+
+};
+
+LCD::LCD(): Actuator() {};
+
+void LCD::run() {
+
+    while(1){
+
+      if ( (i2cbus!=NULL)&&!(i2cbus->isEmptyRegister(i2caddr))){
+
+        Device::i2cbus->requestFrom(i2caddr, buf, I2C_BUFFER_SIZE);
+        cout << "---Pits :"<< buf << endl;
+
+      }
+
+      sleep(1);
+
+    }
+
+}
+
+EngineTemperatureSensor::EngineTemperatureSensor(int d, int a): Sensor() {
+
+  temps = d;
+  alea = a;
+  val = engineTemp;
+
+};
+
+void EngineTemperatureSensor::run() {
+
+  while (1) {
+
+    val = engineTemp;
+    alea = 1 - alea;
+    if(ptrmem != NULL) *ptrmem = val + alea;
+    sleep(temps);
+
+  }
+
+}
+
+/*//classe AnalogSensorTemperature
 AnalogSensorTemperature::AnalogSensorTemperature(int d,int  t):Device(),val(t),temps(d){
 
   alea = 1;
@@ -68,8 +134,7 @@ void IntelligentDigitalActuatorLED::run(){
 }
 
 // classe I2CActuatorScreen
-I2CActuatorScreen::I2CActuatorScreen ():Device(){
-  }
+I2CActuatorScreen::I2CActuatorScreen ():Device(){};
 
 void I2CActuatorScreen::run(){
   while(1){
@@ -80,6 +145,7 @@ void I2CActuatorScreen::run(){
     sleep(1);
     }
 }
+
 
 AnalogSensorLuminosity::AnalogSensorLuminosity(int d,int  l): Device(),val(l),temps(d){
 
@@ -114,4 +180,4 @@ void ExternalDigitalSensorButton::run(){
 
   sleep(temps);
 
-}
+}*/

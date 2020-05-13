@@ -76,6 +76,8 @@ protected:
   int i2caddr;
     // lien sur l'objet representant le bus I2C
   I2C *i2cbus;
+
+  int temps;
 public:
     // constructeur initialisant le minimum
     Device();
