@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <fstream>
 #include "core_simulation.h"
 
 // la fonction d'initialisation d'arduino
@@ -11,6 +12,9 @@ void Board::setup(){
   pinMode(0,OUTPUT);
   pinMode(2,INPUT);
   pinMode(3,OUTPUT);
+  pinMode(4,INPUT);
+  digitalWrite(0,LOW);
+  digitalWrite(3,LOW);
 
 }
 
@@ -61,16 +65,18 @@ void Board::loop(){
   if(bascule) {
 
     digitalWrite(0,HIGH);
-    digitalWrite(3,HIGH);
 
   } else {
 
     digitalWrite(0,LOW);
-    digitalWrite(3,LOW);
 
   }
 
   bascule = 1 - bascule;
+
+  val = digitalRead(4);
+  if (val == 1) digitalWrite(3,HIGH);
+  else digitalWrite(3,LOW);
   
 }
 

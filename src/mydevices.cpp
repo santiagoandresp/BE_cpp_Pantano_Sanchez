@@ -52,12 +52,12 @@ void IntelligentDigitalActuatorLED::run(){
     if (state == LOW) {
 
       cout << "smartLED: OFF\n";
-      lum_environment = 250;
+      lum_environment = 200;
 
     } else {
 
       cout << "smartLED: ON\n";
-      lum_environment = 200;
+      lum_environment = 250;
 
     }
 
@@ -98,5 +98,20 @@ void AnalogSensorLuminosity::run() {
     sleep(temps);
 
   }
+
+}
+
+// Classe ExternalDigitalSensorButton
+
+ExternalDigitalSensorButton::ExternalDigitalSensorButton(int d,bool s): Device(), state(s), temps(d) {}
+
+void ExternalDigitalSensorButton::run(){
+
+  if (ifstream("on.txt")) state = true;
+  else state = false;
+
+  if(ptrmem != NULL) *ptrmem = int(state);
+
+  sleep(temps);
 
 }

@@ -5,6 +5,7 @@
 #include <thread>
 #include <unistd.h>
 #include <string.h>
+#include <fstream>
 #include "core_simulation.h"
 
 extern int lum_environment;
@@ -81,6 +82,20 @@ public:
   //constructeur ne pas oublier d'initialiser la classe mere
   AnalogSensorLuminosity(int d,int  l);
   // thread representant le capteur et permettant de fonctionner independamment de la board
+  virtual void run();
+
+};
+
+class ExternalDigitalSensorButton : public Device {
+
+private:
+
+  bool state;
+  int temps;
+
+public:
+
+  ExternalDigitalSensorButton(int d,bool s);
   virtual void run();
 
 };
