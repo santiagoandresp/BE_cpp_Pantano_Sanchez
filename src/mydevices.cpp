@@ -2,13 +2,6 @@
 
 using namespace std;
 
-int wheelPressure[4] = {32,32,10,31};
-int engineTemp = 125;
-int wheelTemp[4] = {110,108,125,121};
-int speed = 250;
-int rpm = 4500;
-int fuel = 90;
-
 Sensor::Sensor(): Device() {};
 
 Actuator::Actuator(): Device() {};

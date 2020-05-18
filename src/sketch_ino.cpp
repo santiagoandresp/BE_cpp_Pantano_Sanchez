@@ -2,6 +2,13 @@
 #include <fstream>
 #include "core_simulation.h"
 
+int wheelPressure[4] = {32,32,32,32};
+int engineTemp = 100;
+int wheelTemp[4] = {150,150,150,150};
+int speed = 250;
+int rpm = 6000;
+int fuel = 65;
+
 // la fonction d'initialisation d'arduino
 void Board::setup(){
 
@@ -23,6 +30,29 @@ void Board::setup(){
 
 }
 
+void readSim(){
+
+  ifstream readFile("Sim/Puncture.txt");
+  string line;
+
+  int contador = 0;
+  static int nline = 0;
+
+  while(getline(readFile,line)) {
+
+    if(nline == contador) {
+      
+      //cout << line << endl;
+
+    }
+
+    contador++;
+  }
+
+  nline++;
+
+}
+
 // la boucle de controle arduino
 void Board::loop(){
   char buf[100];
@@ -31,7 +61,13 @@ void Board::loop(){
   static int counter = 0;
 
   switch (counter) {
+
     case 0:
+
+      readSim();
+      break;
+
+    case 2:
 
       val = analogRead(1);
       sprintf(buf,"Engine temperature %d",val);
@@ -45,7 +81,7 @@ void Board::loop(){
       }
       break;
 
-    case 2:
+    case 4:
 
       val = analogRead(2);
       sprintf(buf,"Speed %d",val);
@@ -53,7 +89,7 @@ void Board::loop(){
       bus.write(1,buf,100);
       break;
 
-    case 4:
+    case 6:
 
       val = analogRead(3);
       sprintf(buf,"RPMs %d",val);
@@ -61,7 +97,7 @@ void Board::loop(){
       bus.write(1,buf,100);
       break;
 
-    case 6:
+    case 8:
 
       val = analogRead(4);
       sprintf(buf,"Fuel %d%%",val);
@@ -75,7 +111,7 @@ void Board::loop(){
       }
       break;
 
-    case 8:
+    case 10:
 
       val = analogRead(5);
       sprintf(buf,"Pressure Wheel 1 %d",val);
@@ -89,7 +125,7 @@ void Board::loop(){
       }
       break;
 
-    case 10:
+    case 12:
 
       val = analogRead(6);
       sprintf(buf,"Pressure Wheel 2 %d",val);
@@ -103,7 +139,7 @@ void Board::loop(){
       }
       break;
 
-    case 12:
+    case 14:
 
       val = analogRead(7);
       sprintf(buf,"Pressure Wheel 3 %d",val);
@@ -117,7 +153,7 @@ void Board::loop(){
       }
       break;
 
-    case 14:
+    case 16:
 
       val = analogRead(8);
       sprintf(buf,"Pressure Wheel 4 %d",val);
@@ -131,7 +167,7 @@ void Board::loop(){
       }
       break;
 
-    case 16:
+    case 18:
 
       val = analogRead(9);
       sprintf(buf,"Temperature Wheel 1 %d",val);
@@ -145,7 +181,7 @@ void Board::loop(){
       }
       break;
 
-    case 18:
+    case 20:
 
       val = analogRead(10);
       sprintf(buf,"Temperature Wheel 2 %d",val);
@@ -159,7 +195,7 @@ void Board::loop(){
       }
       break;
 
-    case 20:
+    case 22:
 
       val = analogRead(11);
       sprintf(buf,"Temperature Wheel 3 %d",val);
@@ -173,7 +209,7 @@ void Board::loop(){
       }
       break;
 
-    case 22:
+    case 24:
 
       val = analogRead(12);
       sprintf(buf,"Temperature Wheel 4 %d",val);
@@ -193,7 +229,7 @@ void Board::loop(){
 
   };
 
-  if (counter == 24) counter = 0;
+  if (counter == 26) counter = 0;
   else counter++;
 
   sleep(1);
