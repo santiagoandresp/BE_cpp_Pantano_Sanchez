@@ -2,8 +2,12 @@
 
 using namespace std;
 
-int pressureWheel[4] = {32,32,30,31};
-int engineTemp = 98;
+int wheelPressure[4] = {32,32,10,31};
+int engineTemp = 125;
+int wheelTemp[4] = {110,108,125,121};
+int speed = 250;
+int rpm = 4500;
+int fuel = 90;
 
 Sensor::Sensor(): Device() {};
 
@@ -14,7 +18,7 @@ TPMS::TPMS(int d,int a, int w): Sensor() {
   temps = d;
   alea = a;
   wheel = w;
-  val = pressureWheel[wheel-1];
+  val = wheelPressure[wheel-1];
 
 };
 
@@ -22,7 +26,7 @@ void TPMS::run() {
 
   while (1) {
 
-    val = pressureWheel[wheel-1];
+    val = wheelPressure[wheel-1];
     alea = 1 - alea;
     if(ptrmem != NULL) *ptrmem = val + alea;
     sleep(temps);
@@ -40,7 +44,8 @@ void LCD::run() {
       if ( (i2cbus!=NULL)&&!(i2cbus->isEmptyRegister(i2caddr))){
 
         Device::i2cbus->requestFrom(i2caddr, buf, I2C_BUFFER_SIZE);
-        cout << "---Pits :"<< buf << endl;
+        if (i2caddr == 1) cout << "---Pits : "<< buf << endl;
+        else if (i2caddr == 2) cout << "---Pilot : "<< buf << endl;
 
       }
 
@@ -63,6 +68,89 @@ void EngineTemperatureSensor::run() {
   while (1) {
 
     val = engineTemp;
+    alea = 1 - alea;
+    if(ptrmem != NULL) *ptrmem = val + alea;
+    sleep(temps);
+
+  }
+
+}
+
+Speedometer::Speedometer(int d): Sensor() {
+
+  temps = d;
+  alea = 0;
+  val = speed;
+
+};
+
+void Speedometer::run() {
+
+  while (1) {
+
+    val = speed;
+    if(ptrmem != NULL) *ptrmem = val;
+    sleep(temps);
+
+  }
+
+}
+
+Tachometer::Tachometer(int d): Sensor() {
+
+  temps = d;
+  alea = 0;
+  val = rpm;
+
+};
+
+void Tachometer::run() {
+
+  while (1) {
+
+    val = rpm;
+    if(ptrmem != NULL) *ptrmem = val;
+    sleep(temps);
+
+  }
+
+}
+
+Potentiometer::Potentiometer(int d, int a): Sensor() {
+
+  temps = d;
+  alea = a;
+  val = fuel;
+
+};
+
+void Potentiometer::run() {
+
+  while (1) {
+
+    val = fuel;
+    alea = 1 - alea;
+    if(ptrmem != NULL) *ptrmem = val + alea;
+    sleep(temps);
+
+  }
+
+}
+
+WheelTemperatureSensor::WheelTemperatureSensor(int d, int a, int w): Sensor() {
+
+  temps = d;
+  alea = a;
+  wheel = w;
+  val = wheelTemp[wheel-1];
+
+};
+
+void WheelTemperatureSensor::run() {
+
+  while (1) {
+
+    val = wheelTemp[wheel-1];
     alea = 1 - alea;
     if(ptrmem != NULL) *ptrmem = val + alea;
     sleep(temps);

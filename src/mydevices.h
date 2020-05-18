@@ -8,8 +8,12 @@
 #include <fstream>
 #include "core_simulation.h"
 
-extern int pressureWheel[4];
+extern int wheelPressure[4];
 extern int engineTemp;
+extern int wheelTemp[4];
+extern int speed;
+extern int rpm;
+extern int fuel;
 
 class Sensor: public Device {
 
@@ -69,6 +73,46 @@ class EngineTemperatureSensor: public Sensor {
 public:
 
   EngineTemperatureSensor(int d, int a);
+  void run();
+
+};
+
+class Speedometer: public Sensor {
+
+public:
+
+  Speedometer(int d);
+  void run();
+
+};
+
+class Tachometer: public Sensor {
+
+public:
+
+  Tachometer(int d);
+  void run();
+
+};
+
+class Potentiometer: public Sensor {
+
+public:
+
+  Potentiometer(int d, int a);
+  void run();
+
+};
+
+class WheelTemperatureSensor: public Sensor {
+
+private:
+
+  int wheel;
+
+public:
+
+  WheelTemperatureSensor(int d, int a, int w);
   void run();
 
 };
