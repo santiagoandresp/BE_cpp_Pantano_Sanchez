@@ -122,7 +122,8 @@ void Potentiometer::run() {
   while (1) {
 
     val = fuel;
-    alea = 1 - alea;
+    if (val == 100) alea = 0;
+    else alea = 1 - alea;
     if(ptrmem != NULL) *ptrmem = val + alea;
     sleep(temps);
 
