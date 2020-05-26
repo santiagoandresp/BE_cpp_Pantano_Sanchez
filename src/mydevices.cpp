@@ -37,9 +37,9 @@ void i2cDevice::run() {
       if ( (i2cbus!=NULL)&&!(i2cbus->isEmptyRegister(i2caddr))){
 
         Device::i2cbus->requestFrom(i2caddr, buf, I2C_BUFFER_SIZE);
-        if (i2caddr == 1) cout << "---Pits : "<< buf << endl;
-        else if (i2caddr == 2) cout << "---Pilot : "<< buf << endl;
-        else if (i2caddr == 3) cout << "---TV Transmission : " << buf << endl;
+        if (i2caddr == 1) cout << "---Pits: "<< buf << endl;
+        else if (i2caddr == 2) cout << "---Pilot: "<< buf << endl;
+        else if (i2caddr == 3) cout << "---TV Transmission: " << buf << endl;
 
       };
 
