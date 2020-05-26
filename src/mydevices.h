@@ -14,6 +14,8 @@ extern int wheelTemp[4];
 extern int speed;
 extern int rpm;
 extern int fuel;
+extern bool tempState;
+extern bool fuelState;
 
 class Sensor: public Device {
 
@@ -64,6 +66,39 @@ private:
 public:
 
   i2cDevice();
+  void run();
+
+};
+
+// LEDs
+class LED: public Actuator {
+
+protected:
+
+  int state;
+
+public:
+
+  LED(int d);
+
+};
+
+// Temperature LED
+class TempLED: public LED {
+
+public:
+
+  TempLED(int d);
+  void run();
+
+};
+
+// Fuel LED
+class FuelLED: public LED {
+
+public:
+
+  FuelLED(int d);
   void run();
 
 };

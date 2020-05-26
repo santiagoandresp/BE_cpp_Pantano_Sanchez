@@ -49,6 +49,43 @@ void i2cDevice::run() {
 
 };
 
+LED::LED(int d): Actuator() {
+
+  state = false;
+  temps = d;
+
+};
+
+TempLED::TempLED(int d): LED(d) {};
+
+void TempLED::run() {
+
+  while(1){
+
+    if(ptrmem != NULL) state = *ptrmem;
+    if(state == HIGH) cout << "Temperature indicator light ON" << endl;
+    //else cout << "Temperature indicator light OFF" << endl;
+    sleep(temps);
+
+  };
+
+};
+
+FuelLED::FuelLED(int d): LED(d) {};
+
+void FuelLED::run() {
+
+  while(1){
+
+    if(ptrmem != NULL) state = *ptrmem;
+    if(state == true) cout << "Fuel indicator light ON" << endl;
+    //else cout << "Fuel indicator light OFF" << endl;
+    sleep(temps);
+
+  };
+
+};
+
 EngineTemperatureSensor::EngineTemperatureSensor(int d, int a): Sensor() {
 
   temps = d;

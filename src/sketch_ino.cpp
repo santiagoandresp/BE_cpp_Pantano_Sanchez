@@ -11,7 +11,7 @@ int fuel;
 
 void readSim(){
 
-  ifstream readFile("Sim/Puncture.txt");
+  ifstream readFile("Sim/Overheat.txt");
   string line;
 
   static int nline = 0;
@@ -62,10 +62,10 @@ void readSim(){
 
 // la fonction d'initialisation d'arduino
 void Board::setup(){
-
+  
   // on configure la vitesse de la liaison
   Serial.begin(9600);
-// on fixe les pin en entree et en sorite en fonction des capteurs/actionneurs mis sur la carte
+  // on fixe les pin en entree et en sorite en fonction des capteurs/actionneurs mis sur la carte
   pinMode(1,INPUT);
   pinMode(2,INPUT);
   pinMode(3,INPUT);
@@ -81,6 +81,10 @@ void Board::setup(){
   pinMode(13,INPUT);
   pinMode(14,INPUT);
   pinMode(15,INPUT);
+  pinMode(16,OUTPUT);
+  pinMode(17,OUTPUT);
+  digitalWrite(16,LOW);
+  digitalWrite(17,LOW);
 
 }
 
@@ -110,8 +114,13 @@ void Board::loop(){
 
       if (val > 120) {
 
+        digitalWrite(16,HIGH);
         sprintf(war,"Overheated engine %d",val);
         bus.write(2,war,100);
+
+      } else {
+
+        digitalWrite(16,LOW);
 
       };
       break;
@@ -144,8 +153,13 @@ void Board::loop(){
 
       if (val < 15) {
 
+        digitalWrite(17,HIGH);
         sprintf(war,"Low fuel %d%%",val);
         bus.write(2,war,100);
+
+      } else {
+
+        digitalWrite(17,LOW);
 
       };
       break;

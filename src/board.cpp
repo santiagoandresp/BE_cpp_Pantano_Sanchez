@@ -24,6 +24,8 @@ int main(){
   Camera cameraR(20,'R');
   Camera cameraG(20,'G');
   Camera cameraB(20,'B');
+  TempLED tempLED(5);
+  FuelLED fuelLED(5);
   
   // branchement des capteurs actionneurs
   esp8266.i2c(1,LCDPits);
@@ -44,6 +46,8 @@ int main(){
   esp8266.pin(13,cameraR);
   esp8266.pin(14,cameraG);
   esp8266.pin(15,cameraB);
+  esp8266.pin(16,tempLED);
+  esp8266.pin(17,fuelLED);
   
   // allumage de la carte
   esp8266.run();
