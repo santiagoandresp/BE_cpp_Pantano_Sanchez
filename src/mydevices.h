@@ -55,7 +55,7 @@ public:
 };
 
 // Screen
-class LCD: public Actuator {
+class i2cDevice: public Actuator {
 
 private:
 
@@ -63,7 +63,7 @@ private:
 
 public:
 
-  LCD();
+  i2cDevice();
   void run();
 
 };
@@ -117,94 +117,35 @@ public:
 
 };
 
-/*// exemple de capteur analogique de temperature, ne pas oublier d'heriter de Device
-class AnalogSensorTemperature: public Device {
-private:
-  // fait osciller la valeur du cpateur de 1
-  int alea;
-  // valeur de temperature mesuree
-  int val;
-  // temps entre 2 prises de valeurs
-  int temps;
-  
-public:
-  //constructeur ne pas oublier d'initialiser la classe mere
-  AnalogSensorTemperature(int d,int  t);
-  // thread representant le capteur et permettant de fonctionner independamment de la board
-  virtual void run();
-};
+class Image {
 
-// exemple d'actionneur digital : une led, ne pas oublier d'heriter de Device
-class DigitalActuatorLED: public Device {
-protected:
-  // etat de la LED
-  int state;
-  // temps entre 2 affichage de l etat de la led
-  int temps;
-  
-public:
-  // initialisation du temps de rafraichiisement
-  DigitalActuatorLED(int t);
-  // thread representant l'actionneur et permettant de fonctionner independamment de la board
-  virtual void run();
-};
+  int *RGB;
 
-class IntelligentDigitalActuatorLED: public DigitalActuatorLED {
-  
 public:
 
-  // initialisation du temps de rafraichiisement
-  IntelligentDigitalActuatorLED(int t);
-  // thread representant l'actionneur et permettant de fonctionner independamment de la board
-  virtual void run();
+  Image();
+  Image(int *a);
+  Image & operator = (const Image & img);
+  int getRed();
+  int getGreen();
+  int getBlue();
 
 };
 
-// exemple d'actionneur sur le bus I2C permettant d'echanger des tableaux de caracteres : un ecran, ne pas oublier d'heriter de Device
-class I2CActuatorScreen : public Device {
-protected:
-    // memorise l'affichage de l'ecran
-  char buf[I2C_BUFFER_SIZE];
-  
-public:
-  // constructeur
-  I2CActuatorScreen ();
-  // thread representant le capteur et permettant de fonctionner independamment de la board
-  virtual void run();
-};
+Image generateImage();
 
-// Capteur de luminosité
-
-class AnalogSensorLuminosity : public Device {
-
-private:
-  // fait osciller la valeur du cpateur de 5
-  int alea;
-  // valeur de luminosité mesuree
-  int val;
-  // temps entre 2 prises de valeurs
-  int temps;
-  
-public:
-  //constructeur ne pas oublier d'initialiser la classe mere
-  AnalogSensorLuminosity(int d,int  l);
-  // thread representant le capteur et permettant de fonctionner independamment de la board
-  virtual void run();
-
-};
-
-class ExternalDigitalSensorButton : public Device {
+class Camera: public Device {
 
 private:
 
-  bool state;
-  int temps;
+  Image image;
+  char color;
 
 public:
 
-  ExternalDigitalSensorButton(int d,bool s);
-  virtual void run();
+  Camera(int d, char c);
+  void run();
 
-};*/
+};
 
 #endif

@@ -23,7 +23,6 @@ void readSim(){
 
     if(nline == contador) {
       
-      //cout << line << endl;
       string delimiter = " ";
       size_t pos = 0;
       string value;
@@ -79,6 +78,9 @@ void Board::setup(){
   pinMode(10,INPUT);
   pinMode(11,INPUT);
   pinMode(12,INPUT);
+  pinMode(13,INPUT);
+  pinMode(14,INPUT);
+  pinMode(15,INPUT);
 
 }
 
@@ -86,7 +88,11 @@ void Board::setup(){
 void Board::loop(){
   char buf[100];
   char war[100];
+  char tr[100];
   static int val;
+  static int R;
+  static int G;
+  static int B;
   static int counter = 0;
 
   switch (counter) {
@@ -287,6 +293,15 @@ void Board::loop(){
 
       }
       break;
+
+    case 24:
+
+      R = analogRead(13);
+      G = analogRead(14);
+      B = analogRead(15);
+      sprintf(tr,"Onboard camera %d %d %d",R,G,B);
+      bus.write(3,tr,100);
+      break;
     
     default:
 
@@ -294,7 +309,7 @@ void Board::loop(){
 
   };
 
-  if (counter == 24) counter = 0;
+  if (counter == 25) counter = 0;
   else counter++;
 
   sleep(1);

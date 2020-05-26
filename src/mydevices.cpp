@@ -28,9 +28,9 @@ void TPMS::run() {
 
 };
 
-LCD::LCD(): Actuator() {};
+i2cDevice::i2cDevice(): Actuator() {};
 
-void LCD::run() {
+void i2cDevice::run() {
 
     while(1){
 
@@ -39,14 +39,15 @@ void LCD::run() {
         Device::i2cbus->requestFrom(i2caddr, buf, I2C_BUFFER_SIZE);
         if (i2caddr == 1) cout << "---Pits : "<< buf << endl;
         else if (i2caddr == 2) cout << "---Pilot : "<< buf << endl;
+        else if (i2caddr == 3) cout << "---TV Transmission : " << buf << endl;
 
-      }
+      };
 
       sleep(1);
 
-    }
+    };
 
-}
+};
 
 EngineTemperatureSensor::EngineTemperatureSensor(int d, int a): Sensor() {
 
@@ -65,9 +66,9 @@ void EngineTemperatureSensor::run() {
     if(ptrmem != NULL) *ptrmem = val + alea;
     sleep(temps);
 
-  }
+  };
 
-}
+};
 
 Speedometer::Speedometer(int d): Sensor() {
 
@@ -85,9 +86,9 @@ void Speedometer::run() {
     if(ptrmem != NULL) *ptrmem = val;
     sleep(temps);
 
-  }
+  };
 
-}
+};
 
 Tachometer::Tachometer(int d): Sensor() {
 
@@ -105,9 +106,9 @@ void Tachometer::run() {
     if(ptrmem != NULL) *ptrmem = val;
     sleep(temps);
 
-  }
+  };
 
-}
+};
 
 Potentiometer::Potentiometer(int d, int a): Sensor() {
 
@@ -127,9 +128,9 @@ void Potentiometer::run() {
     if(ptrmem != NULL) *ptrmem = val + alea;
     sleep(temps);
 
-  }
+  };
 
-}
+};
 
 WheelTemperatureSensor::WheelTemperatureSensor(int d, int a, int w): Sensor() {
 
@@ -153,113 +154,84 @@ void WheelTemperatureSensor::run() {
 
 }
 
-/*//classe AnalogSensorTemperature
-AnalogSensorTemperature::AnalogSensorTemperature(int d,int  t):Device(),val(t),temps(d){
+Image::Image() {
 
-  alea = 1;
+  RGB = NULL;
 
 }
 
-void AnalogSensorTemperature::run(){
-  while(1){
-    val = TEMP;
-    alea=1-alea;
-    if(ptrmem != NULL)
-      *ptrmem = val + alea;
-    sleep(temps);
-  }
-}
+Image::Image(int *a) {
 
-//classe DigitalActuatorLED
-DigitalActuatorLED::DigitalActuatorLED(int t): Device(),state(LOW),temps(t){
-}
+  RGB = new int[3];
+  for(int i=0;i<3;i++) RGB[i] = a[i];
 
-void DigitalActuatorLED::run(){
-  while(1){
-    if(ptrmem != NULL)
-      state = *ptrmem;
-    if (state==LOW)
-      cout << "LED: OFF\n";
-    else
-      cout << "LED: ON\n";
-    sleep(temps);
-    }
-}
+};
 
-//classe IntelligentDigitalActuatorLED
-IntelligentDigitalActuatorLED::IntelligentDigitalActuatorLED(int t): DigitalActuatorLED(t){
-}
+Image & Image::operator = (const Image & img){
 
-void IntelligentDigitalActuatorLED::run(){
+  if(this!= & img){
+
+		delete[] RGB;
+		RGB = new int[3];
+		for(int i=0;i<3;i++) RGB[i] = img.RGB[i];
+
+	};
+	return (*this);
+
+};
+
+int Image::getRed() {
+
+  return RGB[0];
+
+};
+
+int Image::getGreen() {
+
+  return RGB[1];
+
+};
+
+int Image::getBlue() {
+
+  return RGB[2];
+
+};
+
+Image generateImage() {
+
+  int R = rand() % 255;
+  int G = rand() % 255;
+  int B = rand() % 255;
+  int photo[3] = {R,G,B};
+  Image img(photo);
+  return img;
+
+};
+
+Camera::Camera(int d, char C): Device() {
+
+  temps = d;
+  color = C;
+
+};
+
+void Camera::run() {
 
   while (1) {
-
-    if(ptrmem != NULL)
-      state = *ptrmem;
     
-    if (state == LOW) {
+    image = generateImage();
 
-      cout << "smartLED: OFF\n";
-      lum_environment = 200;
+    if(ptrmem != NULL) {
 
-    } else {
+      if (color == 'R') *ptrmem = image.getRed();
+      if (color == 'G') *ptrmem = image.getGreen();
+      if (color == 'B') *ptrmem = image.getBlue();
 
-      cout << "smartLED: ON\n";
-      lum_environment = 250;
-
-    }
+    };
 
     sleep(temps);
 
-    }
+  };
 
-}
-
-// classe I2CActuatorScreen
-I2CActuatorScreen::I2CActuatorScreen ():Device(){};
-
-void I2CActuatorScreen::run(){
-  while(1){
-    if ( (i2cbus!=NULL)&&!(i2cbus->isEmptyRegister(i2caddr))){
-      Device::i2cbus->requestFrom(i2caddr, buf, I2C_BUFFER_SIZE);
-      cout << "---screen :"<< buf << endl;
-    }
-    sleep(1);
-    }
-}
-
-
-AnalogSensorLuminosity::AnalogSensorLuminosity(int d,int  l): Device(),val(l),temps(d){
-
-  alea = 5;
-
-}
-
-void AnalogSensorLuminosity::run() {
-
-  while(1){
-
-    val = lum_environment;
-    alea = 5 - alea;
-    if(ptrmem != NULL)
-      *ptrmem = val + alea;
-    sleep(temps);
-
-  }
-
-}
-
-// Classe ExternalDigitalSensorButton
-
-ExternalDigitalSensorButton::ExternalDigitalSensorButton(int d,bool s): Device(), state(s), temps(d) {}
-
-void ExternalDigitalSensorButton::run(){
-
-  if (ifstream("on.txt")) state = true;
-  else state = false;
-
-  if(ptrmem != NULL) *ptrmem = int(state);
-
-  sleep(temps);
-
-}*/
+};
