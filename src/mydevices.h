@@ -14,8 +14,6 @@ extern int wheelTemp[4];
 extern int speed;
 extern int rpm;
 extern int fuel;
-extern bool tempState;
-extern bool fuelState;
 
 class Sensor: public Device {
 
