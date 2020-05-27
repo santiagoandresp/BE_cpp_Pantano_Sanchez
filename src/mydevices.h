@@ -73,10 +73,6 @@ public:
 // LEDs
 class LED: public Actuator {
 
-protected:
-
-  int state;
-
 public:
 
   LED(int d);
